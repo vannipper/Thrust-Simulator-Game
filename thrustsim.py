@@ -28,6 +28,8 @@ SLIDER_HEIGHT = HEIGHT - GROUND_HEIGHT - SLIDER_Y - 20
 SLIDER_WIDTH = 10
 KNOB_RADIUS = 15  
 
+font = pygame.font.SysFont(None, 28)
+
 if __name__ == "__main__":
     pos, vel = 0, 0
     thrust = 0  # Start value
@@ -67,7 +69,7 @@ if __name__ == "__main__":
 
         # Physics 
         if fuel > 0:
-            fuel -= (thrust / 20) * (1/FPS)
+            fuel -= (thrust / 5) * (1/FPS)
         else:
             thrust = 0
             fuel = 0
@@ -82,15 +84,11 @@ if __name__ == "__main__":
         if pos < 0:
             pos = 0
             vel = 0
+            fuel = 100
 
         if vel <= 0 and fuel == 0:
             if pos > high_score:
                 high_score = pos
-                text = font.render("NEW HIGH SCORE!", True, WHITE)
-                screen.blit(text, (WIDTH // 2, HEIGHT // 2))
-        text = font.render("Press space to reset", True, WHITE)
-        screen.blit(text, (WIDTH // 2, HEIGHT // 2 - 20))
-            
 
         # Draw background
         for y in range(HEIGHT - GROUND_HEIGHT):
@@ -112,7 +110,7 @@ if __name__ == "__main__":
         pygame.draw.circle(screen, RED, (knob_x, int(knob_y)), KNOB_RADIUS)
 
         # Draw rocket
-        pygame.draw.circle(screen, RED, (WIDTH // 2, int(HEIGHT - GROUND_HEIGHT - (pos / 20))), 10)
+        pygame.draw.circle(screen, RED, (WIDTH // 2, int(HEIGHT - GROUND_HEIGHT - (pos / 5))), 20)
 
         # Draw fuel bar
         FUEL_BAR_X = 40
@@ -126,7 +124,6 @@ if __name__ == "__main__":
 
 
         # Draw values (after background)
-        font = pygame.font.SysFont(None, 28)
         text = font.render(f"Position: {int(pos)}", True, WHITE)
         screen.blit(text, (SLIDER_X - 100, SLIDER_Y - 80))
         text = font.render(f"Velocity: {int(vel)}", True, WHITE)
@@ -142,6 +139,6 @@ if __name__ == "__main__":
 
 # Write high score to file
 with open("highscore.txt", "w") as f:
-    f.write(str(pos))
+    f.write(str(high_score))
 
 pygame.quit()
